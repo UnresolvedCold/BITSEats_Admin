@@ -38,6 +38,8 @@ import static android.util.TypedValue.COMPLEX_UNIT_SP;
 
 public class MainActivity extends AppCompatActivity {
 
+    String mess = "INS";
+
     String MallId,RestId;
 
     DatabaseReference RefToOrders;
@@ -129,7 +131,7 @@ public class MainActivity extends AppCompatActivity {
 
         AttachClickListnerForMenuBtn();
 
-        RefToOrders.orderByChild("Mess").startAt("INS").endAt("INS").addValueEventListener(order_listner);
+        RefToOrders.orderByChild("Mess").startAt(mess).endAt(mess).addValueEventListener(order_listner);
 
     }
 
@@ -146,6 +148,7 @@ public class MainActivity extends AppCompatActivity {
         vOption1.setText("History");
         vOption2.setText("Items Availability");
         vOption3.setVisibility(View.GONE);
+        vOption1.setVisibility(View.GONE);
 
         vMore.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -167,22 +170,22 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view)
             {
                 Intent intent = new Intent(MainActivity.this,AllOrders.class);
-                intent.putExtra("resId",RestId);
+                intent.putExtra("mess",mess);
                 startActivity(intent);
             }
-        });
+        });*/
 
         vOption2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view)
             {
                 Intent intent = new Intent(MainActivity.this,ItemsAvailability.class);
-                intent.putExtra("resId",RestId);
+                intent.putExtra("mess",mess);
                 startActivity(intent);
             }
         });
 
-        vOption3.setOnClickListener(new View.OnClickListener() {
+       /* vOption3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view)
             {
