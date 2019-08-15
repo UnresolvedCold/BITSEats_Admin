@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">BITSEats Admin INS</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+
+    <string name="title_ActiveOrders">New</string>
+    <string name="title_ProcessingOrders">Processing</string>
+    <string name="title_FinishedOrders">Completed</string>
+</resources>
