@@ -147,10 +147,10 @@ public class MainActivity extends AppCompatActivity {
         final TextView vOption2 = findViewById(R.id.Menu_Option2);
         final TextView vOption3 = findViewById(R.id.Menu_Option3);
 
-        vOption1.setText("History");
+        vOption1.setText("Open/Close Shop");
         vOption2.setText("Items Availability");
         vOption3.setVisibility(View.GONE);
-        vOption1.setVisibility(View.GONE);
+       // vOption1.setVisibility(View.GONE);
 
         vMore.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -167,15 +167,15 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-       /* vOption1.setOnClickListener(new View.OnClickListener() {
+        vOption1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view)
             {
-                Intent intent = new Intent(MainActivity.this,AllOrders.class);
+                Intent intent = new Intent(MainActivity.this,OpenClose.class);
                 intent.putExtra("mess",mess);
                 startActivity(intent);
             }
-        });*/
+        });
 
         vOption2.setOnClickListener(new View.OnClickListener() {
             @Override

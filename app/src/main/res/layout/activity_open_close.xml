@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".OpenClose"
+    android:gravity="center">
+
+   <LinearLayout
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content">
+
+   </LinearLayout>
+
+    <TextView
+        android:id="@+id/OpenShop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Open Shop"
+        android:textSize="18sp"
+        android:background="@drawable/style_button3"
+        android:layout_margin="5dp"
+        android:textColor="#000000"
+        />
+
+    <TextView
+        android:id="@+id/CloseShop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Close Shop"
+        android:textSize="18sp"
+        android:background="@drawable/style_button4"
+        android:layout_margin="5dp"
+        android:textColor="#000000"
+        />
+
+    <TextView
+        android:id="@+id/OpenTakeAway"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Open Take Away"
+        android:textSize="18sp"
+        android:background="@drawable/style_button3"
+        android:layout_margin="5dp"
+        android:textColor="#000000"
+        />
+
+    <TextView
+        android:id="@+id/CloseTakeAway"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Close Take Away"
+        android:textSize="18sp"
+        android:background="@drawable/style_button4"
+        android:layout_margin="5dp"
+        android:textColor="#000000"
+        />
+
+
+    <TextView
+        android:id="@+id/OpenEatHere"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Open Eat Here"
+        android:textSize="18sp"
+        android:background="@drawable/style_button3"
+        android:layout_margin="5dp"
+        android:textColor="#000000"
+        />
+
+    <TextView
+        android:id="@+id/CloseEatHere"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Close Eat Here"
+        android:textSize="18sp"
+        android:background="@drawable/style_button4"
+        android:layout_margin="5dp"
+        android:textColor="#000000"
+        />
+
+    <TextView
+        android:id="@+id/OpenDelivery"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Open Delivery"
+        android:textSize="18sp"
+        android:background="@drawable/style_button3"
+        android:layout_margin="5dp"
+        android:textColor="#000000"
+        />
+
+    <TextView
+        android:id="@+id/CloseDelivery"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Close Delivery"
+        android:textSize="18sp"
+        android:background="@drawable/style_button4"
+        android:layout_margin="5dp"
+        android:textColor="#000000"
+        />
+
+
+</LinearLayout>
