@@ -38,6 +38,8 @@ import static android.util.TypedValue.COMPLEX_UNIT_SP;
 
 public class MainActivity extends AppCompatActivity {
 
+    String DEBUGTAG = "Hundred_TAG";
+
     String mess = "INS";
 
     String MallId,RestId;
@@ -213,15 +215,19 @@ public class MainActivity extends AppCompatActivity {
         public void onDataChange(@NonNull DataSnapshot dataSnapshot)
         {
             orders.clear();
+            Log.d(DEBUGTAG,"order_listner : Start of onDataChange()");
             for(DataSnapshot snapshot:dataSnapshot.getChildren())
             {
-                Log.d("_Hundred_","yo:"+snapshot.getValue().toString());
-
                 if (snapshot.hasChild("OrderUID")) {
                     final String orderUID = snapshot.child("OrderUID").getValue().toString();
                     final String Token = snapshot.child("token").getValue().toString();
+                    final String isPaid = snapshot.child("isPaid").getValue().toString();
                     //if already present in the list ignore
-                    if (!isAlreadyPresent(orderUID)) {
+                   // if (!isAlreadyPresent(orderUID))
+                    if(!isPaid.contains("false"))
+                    {
+
+                        Log.d(DEBUGTAG,"order_listner : isAlready... "+isAlreadyPresent(orderUID)+ " UID - "+snapshot.child("OrderUID").getValue().toString()+" Token - "+snapshot.child("token").getValue().toString() );
                         final OrderRef order = new OrderRef(
                                 snapshot.getKey().toString(),
                                 Math.round(Double.parseDouble(snapshot.child("Cost").getValue().toString())*100.0)*100.0,
@@ -250,13 +256,16 @@ public class MainActivity extends AppCompatActivity {
                                             Items i = new Items(s.getKey().toString(),
                                                     Integer.parseInt(s.getValue().toString()));
 
-                                            Log.d("bhimb","1"+i.name+" "+i.qty);
+                                           // Log.d(DEBUGTAG,"1"+i.name+" "+i.qty);
                                             order.items.add(i);
                                         }
 
-                                        Log.d("bhimb_3","3 "+orders.size()+ " "+ order.items.size());
-                                        orders.add(order);
-                                        DisplayOrders();
+                                      //  Log.d(DEBUGTAG,"3 "+orders.size()+ " "+ order.items.size());
+                                        if(!isAlreadyPresent(orderUID)) {
+                                            orders.add(order);
+                                            Log.d(DEBUGTAG, "order_listner : size of orders " + orders.size());
+                                            DisplayOrders();
+                                        }
 
                                     }
 
@@ -284,17 +293,19 @@ public class MainActivity extends AppCompatActivity {
         private Boolean isAlreadyPresent(String orderUID)
         {
             Iterator<OrderRef> itr = orders.iterator();
+            Log.d(DEBUGTAG,""+orders.size());
             while(itr.hasNext())
             {
                 OrderRef o =itr.next();
-
-                if(o.orderUID.equals(orderUID))
+                Log.d(DEBUGTAG,o.orderUID+" "+orderUID);
+                if(o.orderUID.contains(orderUID))
                 {
+                    Log.d(DEBUGTAG,"true");
                     return true;
                 }
 
             }
-
+            Log.d(DEBUGTAG,"false");
             return false;
         }
     };
@@ -306,130 +317,125 @@ public class MainActivity extends AppCompatActivity {
         vCompletedOrdersList.removeAllViews();
         vProcessingOrdersList.removeAllViews();
 
-        Log.d("Display Order Called","yo");
+        Log.d(DEBUGTAG,"DisplayOrders called");
 
         Iterator<OrderRef> iterator = orders.iterator();
 
         while(iterator.hasNext())
         {
             final OrderRef o = iterator.next();
-            LinearLayout view_inComp= (LinearLayout) inflater.inflate(R.layout.template_order,null,false);
-            LinearLayout view_inComp_list = view_inComp.findViewById(R.id.itemList);
-            TextView vToken=view_inComp.findViewById(R.id.Token);
-            TextView vExtraRequest = view_inComp.findViewById(R.id.extrarequest);
-
-            vToken.setText(o.token);
-            vExtraRequest.setText(o.mode);
-
-            Log.d("_Hundred_","Order :"+o.orderUID);
-
-            Iterator<Items> _iterator = o.items.iterator();
-
-            while(_iterator.hasNext())
+           // if(o.isPaid)
             {
-                Log.d("bhimb","2");
-                Items items = _iterator.next();
-                LinearLayout view_inItem = (LinearLayout)inflater.inflate(R.layout.template_items,null,false);
-                TextView name = view_inItem.findViewById(R.id.template_ItmName);
-                TextView qty = view_inItem.findViewById(R.id.template_Qty);
+                LinearLayout view_inComp = (LinearLayout) inflater.inflate(R.layout.template_order, null, false);
+                LinearLayout view_inComp_list = view_inComp.findViewById(R.id.itemList);
+                TextView vToken = view_inComp.findViewById(R.id.Token);
+                TextView vExtraRequest = view_inComp.findViewById(R.id.extrarequest);
 
-                name.setText(items.name);
-                qty.setText(items.qty+"");
+                vToken.setText(o.token);
+                vExtraRequest.setText(o.mode);
 
-                view_inComp_list.addView(view_inItem);
+                Log.d(DEBUGTAG, "OrderUID :" + o.orderUID);
 
-            }
+                Iterator<Items> _iterator = o.items.iterator();
 
-            if(o.status.equals("end"))
-            {
-                vCompletedOrdersList.addView(view_inComp);
-            }
-            else if (o.status.equals("pro"))
-            {
-                vProcessingOrdersList.addView(view_inComp);
+                while (_iterator.hasNext()) {
 
-                view_inComp.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        final Dialog dialog = new Dialog(MainActivity.this);
-                        dialog.setContentView(R.layout.dialog_confirm);
-                        dialog.setTitle("Confirm");
-                        // dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                        // dialog.setCanceledOnTouchOutside(false);
+                    Items items = _iterator.next();
+                    LinearLayout view_inItem = (LinearLayout) inflater.inflate(R.layout.template_items, null, false);
+                    TextView name = view_inItem.findViewById(R.id.template_ItmName);
+                    TextView qty = view_inItem.findViewById(R.id.template_Qty);
 
-                        View vOK = dialog.findViewById(R.id.OK);
-                        View vCancel =dialog.findViewById(R.id.Cancel);
-                        TextView vconfirmation = dialog.findViewById(R.id.confirmation);
-                        vconfirmation.setText("Are you sure the order is ready?");
+                    name.setText(items.name);
+                    qty.setText(items.qty + "");
 
-                        vOK.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                Log.d("_Hundred_1","Status changed to E");
-                                o.status ="E";
-                                RefToOrders.child(o.UID).child("status").setValue("end");
-                                DisplayOrders();
-                                dialog.dismiss();
-                            }
-                        });
+                    view_inComp_list.addView(view_inItem);
 
-                        vCancel.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                dialog.dismiss();
-                            }
-                        });
+                }
 
-                        dialog.show();
+                if (o.status.equals("end")) {
+                    vCompletedOrdersList.addView(view_inComp);
+                } else if (o.status.equals("pro")) {
+                    vProcessingOrdersList.addView(view_inComp);
 
-                    }
-                });
+                    view_inComp.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            final Dialog dialog = new Dialog(MainActivity.this);
+                            dialog.setContentView(R.layout.dialog_confirm);
+                            dialog.setTitle("Confirm");
+                            // dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                            // dialog.setCanceledOnTouchOutside(false);
 
+                            View vOK = dialog.findViewById(R.id.OK);
+                            View vCancel = dialog.findViewById(R.id.Cancel);
+                            TextView vconfirmation = dialog.findViewById(R.id.confirmation);
+                            vconfirmation.setText("Are you sure the order is ready?");
 
+                            vOK.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    Log.d("_Hundred_1", "Status changed to E");
+                                    o.status = "end";
+                                    RefToOrders.child(o.UID).child("status").setValue("end");
+                                    DisplayOrders();
+                                    dialog.dismiss();
+                                }
+                            });
 
-            }
-            else if (o.status.equals("new"))
-            {
-                vNewOrdersList.addView(view_inComp);
-                view_inComp.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view)
-                    {
+                            vCancel.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    dialog.dismiss();
+                                }
+                            });
 
-                        final Dialog dialog = new Dialog(MainActivity.this);
-                        dialog.setContentView(R.layout.dialog_confirm);
-                        dialog.setTitle("Confirm");
-                        // dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                        // dialog.setCanceledOnTouchOutside(false);
+                            dialog.show();
 
-                        View vOK = dialog.findViewById(R.id.OK);
-                        View vCancel =dialog.findViewById(R.id.Cancel);
-                        TextView vconfirmation = dialog.findViewById(R.id.confirmation);
-                        vconfirmation.setText("Are you sure you want to send the order for processing?");
-
-                        vOK.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                Log.d("_Hundred_1","Status changed to P");
-                                o.status ="P";
-                                RefToOrders.child(o.UID).child("status").setValue("pro");
-                                DisplayOrders();
-                                dialog.dismiss();
-                            }
-                        });
-
-                        vCancel.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                dialog.dismiss();
-                            }
-                        });
-
-                        dialog.show();
+                        }
+                    });
 
 
-                    }
-                });
+                } else if (o.status.equals("new")) {
+                    vNewOrdersList.addView(view_inComp);
+                    view_inComp.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+
+                            final Dialog dialog = new Dialog(MainActivity.this);
+                            dialog.setContentView(R.layout.dialog_confirm);
+                            dialog.setTitle("Confirm");
+                            // dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                            // dialog.setCanceledOnTouchOutside(false);
+
+                            View vOK = dialog.findViewById(R.id.OK);
+                            View vCancel = dialog.findViewById(R.id.Cancel);
+                            TextView vconfirmation = dialog.findViewById(R.id.confirmation);
+                            vconfirmation.setText("Are you sure you want to send the order for processing?");
+
+                            vOK.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    Log.d("_Hundred_1", "Status changed to P");
+                                    o.status = "pro";
+                                    RefToOrders.child(o.UID).child("status").setValue("pro");
+                                    DisplayOrders();
+                                    dialog.dismiss();
+                                }
+                            });
+
+                            vCancel.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    dialog.dismiss();
+                                }
+                            });
+
+                            dialog.show();
+
+
+                        }
+                    });
+                }
             }
 
         }
